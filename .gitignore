@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# 로컬 도구
+node_modules/
+.netlify/
+*.log
+
+# 환경/비밀
+.env
+.env.*

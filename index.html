@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>리메이커스 1기 — 혼자 하면 3일, 같이 하면 4주</title>
+<meta name="description" content="숏폼에 뺏긴 하루 한두 시간. 혼자 말고, 매일 서로 봐주는 3~4명과 함께하는 4주. 90초 유형테스트로 내 '도파민 젤리'부터.">
+<style>
+:root{
+  --amber:#D97706; --amber-ink:#9A5608; --green:#059669; --green-ink:#047857;
+  --bg:#FFFBEB; --surface:#FFFFFF; --ink:#0F172A; --ink-soft:#475569; --ink-mute:#7C8598;
+  --border:#F0E4CF; --muted:#FCF6F0; --danger:#DC2626;
+  --j-yellow:#F6C445; --j-green:#7FCF7A; --j-blue:#6FB7EE; --j-pink:#F49CC0; --j-purple:#B79BE6;
+  --radius:18px; --radius-lg:26px; --maxw:640px;
+  --sp1:8px; --sp2:16px; --sp3:24px; --sp4:40px; --sp5:64px;
+  --shadow:0 6px 24px -10px rgba(30,20,0,.18);
+  --font:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#141210;--surface:#1E1B18;--ink:#F5EFE6;--ink-soft:#C4BBAE;--ink-mute:#948B7E;
+    --border:#332E28;--muted:#211D19;--amber:#F0A93B;--green:#34D399;--shadow:0 8px 28px -12px rgba(0,0,0,.6);}
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.65;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--sp3)}
+section{padding:var(--sp5) 0}
+h1,h2,h3{line-height:1.28;letter-spacing:-.02em;font-weight:800}
+h1{font-size:clamp(30px,7.5vw,42px)}
+h2{font-size:clamp(23px,5.5vw,30px)}
+h3{font-size:19px}
+p{color:var(--ink-soft);font-size:16px}
+.kicker{display:inline-block;font-size:13px;font-weight:700;color:var(--amber-ink);
+  background:var(--muted);border:1px solid var(--border);padding:5px 12px;border-radius:999px;letter-spacing:.01em}
+.lead{font-size:18px;color:var(--ink);margin-top:var(--sp2)}
+.mute{color:var(--ink-mute);font-size:14px}
+.center{text-align:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;
+  padding:0 26px;border-radius:999px;font-size:17px;font-weight:800;border:0;cursor:pointer;
+  font-family:inherit;transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+  width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--amber);color:#fff;box-shadow:var(--shadow)}
+.btn-accent{background:var(--green);color:#fff;box-shadow:var(--shadow)}
+@media (hover:hover){.btn-primary:hover{background:var(--amber-ink)}.btn-accent:hover{background:var(--green-ink)}}
+.btn-ghost{background:transparent;color:var(--ink-soft);min-height:44px;font-size:15px;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:var(--sp3);box-shadow:var(--shadow)}
+.hidden{display:none!important}
+/* hero */
+.hero{padding-top:var(--sp5)}
+.hero h1{margin:var(--sp2) 0}
+.hero .ground{margin-top:var(--sp2);color:var(--ink-soft);font-size:15px}
+.hero .ctas{margin-top:var(--sp4);display:flex;flex-direction:column;gap:14px}
+.blobs{display:flex;justify-content:center;gap:6px;margin-top:var(--sp3);flex-wrap:wrap}
+.blobs .jelly{width:52px;height:52px}
+/* jelly svg base */
+.jelly{display:inline-block}
+.jelly .body{animation:wobble 3.2s ease-in-out infinite}
+.jelly .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.5s infinite}
+.jelly .eye2{animation-delay:.2s}
+@keyframes wobble{0%,100%{transform:rotate(-2deg) translateY(0)}50%{transform:rotate(2deg) translateY(-2px)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes drool{0%,100%{transform:translateY(0);opacity:.9}50%{transform:translateY(2px);opacity:.6}}
+.jelly .drool{transform-box:fill-box;animation:drool 2.6s ease-in-out infinite;transform-origin:top}
+/* quiz */
+.quiz{min-height:auto}
+.progress{height:8px;background:var(--muted);border-radius:999px;overflow:hidden;margin-bottom:var(--sp1)}
+.progress>i{display:block;height:100%;background:var(--amber);border-radius:999px;width:0;transition:width .35s ease}
+.qmeta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-mute);margin-bottom:var(--sp3)}
+.qstep{animation:qin .25s ease}
+@keyframes qin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.qtitle{font-size:21px;font-weight:800;line-height:1.4;margin-bottom:6px}
+.qhint{font-size:13px;color:var(--ink-mute);margin-bottom:var(--sp3)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;min-height:54px;
+  padding:14px 18px;border-radius:16px;border:2px solid var(--border);background:var(--surface);
+  color:var(--ink);font-size:16px;font-weight:600;font-family:inherit;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
+@media (hover:hover){.opt:hover{border-color:var(--amber)}}
+.opt:active{transform:scale(.99)}
+.opt.sel{border-color:var(--amber);background:var(--muted)}
+.opt .box{flex:0 0 22px;height:22px;border-radius:7px;border:2px solid var(--ink-mute);display:grid;place-items:center;font-size:13px;color:#fff}
+.opt.sel .box{background:var(--amber);border-color:var(--amber)}
+.qnav{margin-top:var(--sp3);display:flex;gap:12px;align-items:center}
+.qnav .back{background:none;border:0;color:var(--ink-mute);font-size:14px;cursor:pointer;font-family:inherit;padding:10px}
+/* result */
+.jelly-hero{width:150px;height:150px;margin:0 auto var(--sp2)}
+.rtag{display:inline-block;font-weight:800;font-size:14px;padding:5px 14px;border-radius:999px;color:#4a3a10}
+.rtitle{font-size:15px;color:var(--ink-mute);font-weight:600;margin-top:6px}
+.rbody{margin-top:var(--sp3);font-size:16px;color:var(--ink);line-height:1.75}
+.rbody p{color:var(--ink);margin-bottom:14px}
+.bubble{background:var(--muted);border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;
+  padding:14px 16px;margin:16px 0;position:relative;font-size:15px;color:var(--ink-soft)}
+.bubble b{color:var(--ink)}
+.bubble .src{display:block;margin-top:6px;font-size:12px;color:var(--ink-mute)}
+.method{background:linear-gradient(180deg,var(--muted),transparent);border-left:4px solid var(--green);
+  padding:14px 16px;border-radius:12px;margin:16px 0}
+.open{margin:var(--sp3) 0}
+.open label{display:block;font-size:15px;font-weight:700;margin-bottom:8px}
+.open input{width:100%;min-height:50px;padding:12px 16px;border-radius:14px;border:2px solid var(--border);
+  background:var(--surface);color:var(--ink);font-size:16px;font-family:inherit}
+.open input:focus{outline:none;border-color:var(--amber)}
+/* offer */
+.offer-intro{font-size:14px;color:var(--ink-mute);font-style:italic;margin-bottom:var(--sp2)}
+.feat{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--border)}
+.feat:last-child{border-bottom:0}
+.feat .k{flex:0 0 64px;font-weight:800;color:var(--amber-ink);font-size:15px}
+.feat .v{font-size:15px;color:var(--ink-soft)}
+.feat .v b{color:var(--ink)}
+.founder{background:var(--muted);border-radius:var(--radius);padding:var(--sp3);margin:var(--sp3) 0}
+.founder p{color:var(--ink);font-size:15.5px;margin-bottom:12px}
+.founder .sign{text-align:right;font-weight:700;color:var(--amber-ink)}
+.specs{list-style:none;padding:0;margin:var(--sp2) 0}
+.specs li{padding:8px 0;font-size:15px;color:var(--ink-soft);display:flex;gap:10px}
+.specs li b{color:var(--ink)}
+.specs .chk{color:var(--green);font-weight:800;flex:0 0 auto}
+.refund{background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.3);border-radius:12px;
+  padding:12px 16px;font-size:14px;color:var(--green-ink);font-weight:700;margin-top:12px;text-align:center}
+@media(prefers-color-scheme:dark){.refund{color:#6ee7b7}}
+.faq{margin-top:var(--sp3)}
+.faq details{border-bottom:1px solid var(--border);padding:14px 0}
+.faq summary{font-weight:700;cursor:pointer;font-size:15.5px;list-style:none;display:flex;justify-content:space-between}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--amber);font-weight:800}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin-top:10px;font-size:15px}
+/* payment modal */
+.modal{position:fixed;inset:0;background:rgba(15,10,0,.55);display:none;place-items:center;padding:20px;z-index:100}
+.modal.on{display:grid;animation:fade .2s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal .box{max-width:440px;width:100%;background:var(--surface);border-radius:var(--radius-lg);padding:var(--sp3);box-shadow:0 20px 60px -20px rgba(0,0,0,.5);max-height:90dvh;overflow:auto}
+.acct{background:var(--muted);border:1px dashed var(--amber);border-radius:14px;padding:16px;margin:var(--sp2) 0;font-size:15px;line-height:2}
+.acct b{color:var(--ink)}
+.foot{padding:var(--sp4) 0 var(--sp5);color:var(--ink-mute);font-size:13px;text-align:center;border-top:1px solid var(--border)}
+.tone-switch{font-size:13px;color:var(--ink-mute);font-style:italic;margin:var(--sp2) 0}
+</style>
+</head>
+<body>
+
+<!-- ① HERO -->
+<header class="hero">
+  <div class="wrap center">
+    <span class="kicker">끊어야지 하면서 오늘도 또 켠 당신 — 90초 디지털 도파민 유형테스트</span>
+    <h1>혼자 하면 3일.<br>같이 하면 4주.</h1>
+    <p class="lead">출퇴근길에, 일하다 틈틈이, 퇴근하고 나서도. 손이 먼저 폰으로 가고, 정신 차리면 두세 시간이 사라져 있죠 — 알면서도 못 멈추잖아요.</p>
+    <p class="ground">결심이 딱 젤리처럼 말랑해서, 자꾸 같은 데서 무너지고요. 당신은 어디서 무너지는 ‘젤리’인지, 90초면 나와요.</p>
+    <div class="blobs" id="heroBlobs" aria-hidden="true"></div>
+    <div class="ctas">
+      <button class="btn btn-primary" id="startQuiz">나는 무슨 젤리? — 90초 유형테스트</button>
+      <button class="btn btn-ghost" id="skipToOffer">리메이커스가 뭔지 먼저 볼게요 ↓</button>
+    </div>
+  </div>
+</header>
+
+<!-- ② QUIZ -->
+<section class="quiz hidden" id="quizSec" aria-live="polite">
+  <div class="wrap">
+    <div class="progress"><i id="pbar"></i></div>
+    <div class="qmeta"><span id="qcount">1 / 10</span><span>90초면 끝</span></div>
+    <div id="qhost"></div>
+    <div class="qnav"><button class="back hidden" id="qback">← 이전</button></div>
+  </div>
+</section>
+
+<!-- ③ RESULT -->
+<section class="result hidden" id="resultSec">
+  <div class="wrap">
+    <div class="center">
+      <div class="jelly-hero" id="rJelly"></div>
+      <span class="rtag" id="rTag"></span>
+      <div class="rtitle" id="rTitle"></div>
+    </div>
+    <div class="rbody" id="rBody"></div>
+    <div class="open">
+      <label for="wantOne">🍬 마지막 하나만 (안 써도 돼) — 그 뺏긴 시간에 원래 하고 싶었던 거, 뭐야?</label>
+      <input id="wantOne" type="text" placeholder="아무렇게나 한 줄" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" id="toOfferBtn">이 유형, 1기에선 이렇게 굴러가 — 자리 보기 ↓</button>
+  </div>
+</section>
+
+<!-- ④ OFFER (single) -->
+<section id="offerSec">
+  <div class="wrap">
+    <p class="offer-intro">(여기서부턴 존댓말로 할게요 — 진짜 약속 잡는 자리니까요.)</p>
+    <h2>4주 동안, 이렇게 같이 해요</h2>
+    <div style="margin-top:var(--sp3)">
+      <div class="feat"><div class="k">매일</div><div class="v">한 줄 인증. 오늘의 나를 봐주는 <b>버디 3~4명</b>이 생겨요. 혼내기 없음, 응원만. “오늘 폰만 봄”도 OK.</div></div>
+      <div class="feat"><div class="k">매주</div><div class="v">30분 실시간 체크인. 혼자 세우던 계획이 처음으로 <b>약속</b>이 돼요.</div></div>
+      <div class="feat"><div class="k">4주</div><div class="v"><b>1주 진단 → 2주 환경 바꾸기 → 3주 대체 행동 → 4주 회고.</b> 결과에서 받은 ‘첫 주 딱 하나’가 그대로 1주로 이어져요.</div></div>
+    </div>
+
+    <div class="founder">
+      <p>저 전문가 아니에요. 심할 땐 <b>하루 11시간</b>씩 폰을 붙잡고, 숏폼만 <b>연속 6시간</b> 본 날도 셀 수 없던 사람이에요. 어느 날 문득 무서워졌어요. ‘이걸 못 벗어나면 인생 여기서 망하겠구나.’</p>
+      <p>빠져나오려고 지푸라기라도 잡는 심정으로, 도파민 중독 책을 <b>10권 넘게</b> 읽고 나 같은 사람 <b>7,000명의 글</b>을 밤새 뒤졌어요. 그렇게 ‘뭐가 진짜 되는지’만 추려 만든 4주예요.</p>
+      <p>전문가라서가 아니라 — <b>바닥까지 가보고 빠져나온 사람</b>이 옆에서 같이 갑니다.</p>
+      <div class="sign">— 채선생</div>
+    </div>
+
+    <div class="card">
+      <h3>리메이커스 1기 — 선착 15석</h3>
+      <ul class="specs">
+        <li><span class="chk">•</span><span><b>8월 3일(월) 시작</b> · 4주 · 온라인</span></li>
+        <li><span class="chk">•</span><span>선착 <b>15석</b> · 신청 마감 <b>7월 31일</b></span></li>
+        <li><span class="chk">•</span><span><b>보증금 3만원.</b> 4주 중 <b>20일만 인증하면 완주 = 전액 환급.</b> (매일 100% 아니어도, 며칠 빠져도 리셋 없이 이어가면 돼요)</span></li>
+      </ul>
+      <p class="mute">벌금이 아니에요. 친구끼린 안 걸어도 됐지만, 처음 만난 사람끼린 ‘진짜 할 사람’이라는 신호 하나는 있어야 하더라고요. 끝까지 온 사람에게 그대로 돌아가는 게 ‘진짜 할 사람끼리’의 약속이고요.</p>
+      <button class="btn btn-accent" id="applyBtn" style="margin-top:var(--sp2)">🫧 1기 자리 맡기 →</button>
+      <div class="refund">✓ 20일 인증하면 3만원 그대로 돌려받아요</div>
+    </div>
+
+    <div class="faq">
+      <details><summary>앱 깔아야 하나요?</summary><p>아니요. 1기는 앱 없이 가볍게 운영해요. (그래서 1기예요)</p></details>
+      <details><summary>하루에 얼마나 걸려요?</summary><p>인증 1분 + 주 1회 30분. 시간을 더 쓰는 게 아니라, 새던 시간에 갈 곳을 만드는 거예요.</p></details>
+      <details><summary>또 실패하면요?</summary><p>하루 빠져도 리셋 없어요 — 그래서 완주(20일)가 생각보다 쉬워요. 그 조건만 채우면 3만원 그대로 돌려드려요.</p></details>
+    </div>
+    <p class="mute" style="margin-top:var(--sp3)">아직 1기(파일럿)입니다. 완성된 서비스가 아니라, 같이 만들어갈 15명을 찾아요.</p>
+  </div>
+</section>
+
+<div class="foot">개인정보 수집·이용 동의 후 신청 · 문의 오픈채팅 · © 2026 리메이커스 · 채선생</div>
+
+<!-- 신청/입금 안내 모달 -->
+<div class="modal" id="payModal" role="dialog" aria-modal="true" aria-label="1기 신청">
+  <div class="box">
+    <div id="payStep1">
+      <h3>🫧 1기 자리 맡기</h3>
+      <p style="margin:12px 0">아래만 남겨주시면, 바로 입금 안내를 보여드려요. (선착 15석, 입금 순 마감)</p>
+      <form id="applyForm" name="apply" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="apply">
+        <p hidden aria-hidden="true"><label>비워두세요 <input name="bot-field"></label></p>
+        <div class="open" style="margin:0 0 14px"><label for="fName">이름</label><input id="fName" name="이름" required placeholder="성함" autocomplete="name"></div>
+        <div class="open" style="margin:0 0 14px"><label for="fContact">연락처(오픈챗 ID·전화·이메일)</label><input id="fContact" name="연락처" required placeholder="연락 가능한 곳" autocomplete="off"></div>
+        <input type="hidden" name="유형" id="fType">
+        <input type="hidden" name="하고싶은거" id="fWant">
+        <input type="hidden" name="유입채널" id="fSrc">
+        <label style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);margin-bottom:16px">
+          <input type="checkbox" id="fAgree" name="동의" required style="margin-top:4px"> 개인정보 수집·이용에 동의합니다 (신청·연락 목적)</label>
+        <button type="submit" class="btn btn-accent">입금 안내 받기 →</button>
+        <button type="button" class="btn btn-ghost" data-close style="margin-top:8px">닫기</button>
+      </form>
+    </div>
+    <div id="payStep2" class="hidden">
+      <h3>🫧 <span id="doneName">신청</span>님, 접수됐어요!</h3>
+      <p style="margin:12px 0">자리 확정은 <b>보증금 입금</b>으로 완료돼요 👇</p>
+      <div class="acct">계좌 <b>[은행] 000-0000-0000</b> (예금주 채상희)<br>금액 <b>30,000원</b> · 입금자명 <b>본인 이름</b></div>
+      <p style="font-size:14px">입금 확인되면 바로 확정 메시지 드릴게요. (선착 15석, 입금 순 마감)<br><b>8월 3일(월) 시작 · 4주 중 20일 인증하면 전액 환급.</b> 이번엔 혼자 아니에요. — 채선생</p>
+      <button type="button" class="btn btn-primary" data-close style="margin-top:16px">확인</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- 젤리 SVG (대충·병맛 인라인) ---------- */
+function jelly(color,key){
+  var S='rgba(0,0,0,.18)';
+  var P={
+    // 노랑: 졸린 반쯤 감긴 눈 + 하품 + 침 + 볼터치 (게으른 멍청귀여움)
+    yellow:'<path d="M22 72 C16 46 34 22 58 22 C84 22 100 46 96 72 C93 90 78 99 58 99 C38 99 26 92 22 72 Z" fill="'+color+'" stroke="'+S+'" stroke-width="2.5"/>'+
+      '<ellipse cx="39" cy="67" rx="8" ry="5" fill="#ff9db0" opacity=".45"/><ellipse cx="80" cy="65" rx="8" ry="5" fill="#ff9db0" opacity=".45"/>'+
+      '<path class="eye" d="M34 53 q8 6 15 0" fill="none" stroke="#3a2a12" stroke-width="3" stroke-linecap="round"/>'+
+      '<path class="eye eye2" d="M66 50 q8 6 15 0" fill="none" stroke="#3a2a12" stroke-width="3" stroke-linecap="round"/>'+
+      '<ellipse cx="57" cy="73" rx="4.5" ry="6" fill="#7a3b2e"/>'+
+      '<path class="drool" d="M63 78 q3 9 0 13 q-4 -4 0 -13" fill="#8fd3f2" opacity=".8"/>',
+    // 초록: 옆으로 흘러내리는 몸 + 짝짝이 놀란 눈 + "어?" 입 + 땀 (새는 멍청귀여움)
+    green:'<path d="M20 66 C14 42 32 22 56 22 C82 22 98 44 95 66 C93 82 90 92 82 95 C81 106 71 106 70 95 C56 98 26 92 20 66 Z" fill="'+color+'" stroke="'+S+'" stroke-width="2.5"/>'+
+      '<circle class="eye" cx="43" cy="54" r="8.5" fill="#fff" stroke="#243b2e" stroke-width="2"/><circle cx="44" cy="55" r="3.6" fill="#243b2e"/>'+
+      '<circle class="eye eye2" cx="72" cy="51" r="5.8" fill="#fff" stroke="#243b2e" stroke-width="2"/><circle cx="73" cy="52" r="2.6" fill="#243b2e"/>'+
+      '<ellipse cx="57" cy="72" rx="4" ry="5" fill="#2f5a45"/>'+
+      '<path class="drool" d="M92 40 q3 7 0 10 q-4 -3 0 -10" fill="#8fd3f2" opacity=".8"/>',
+    // 파랑: 뱅글뱅글 어지러운 눈 + 물결 입 + 별 (혼란 멍청귀여움)
+    blue:'<path d="M22 62 C18 38 36 20 60 22 C86 24 101 46 96 68 C93 88 76 98 56 96 C36 94 26 84 22 62 Z" fill="'+color+'" stroke="'+S+'" stroke-width="2.5"/>'+
+      '<ellipse cx="40" cy="67" rx="7" ry="4.5" fill="#ffa5c0" opacity=".4"/><ellipse cx="78" cy="67" rx="7" ry="4.5" fill="#ffa5c0" opacity=".4"/>'+
+      '<path d="M39 53 q7 -7 12 0 q5 6 -3 9 q-9 3 -8 -8" fill="none" stroke="#1b2b3a" stroke-width="2.6" stroke-linecap="round"/>'+
+      '<path d="M64 51 q7 -7 12 0 q5 6 -3 9 q-9 3 -8 -8" fill="none" stroke="#1b2b3a" stroke-width="2.6" stroke-linecap="round"/>'+
+      '<path d="M48 73 q4 5 8 0 q4 -5 8 0" fill="none" stroke="#1b2b3a" stroke-width="2.6" stroke-linecap="round"/>'+
+      '<path d="M91 37 l2 4.6 l4.6 1 l-3.3 3.2 l1 4.7 l-4.3 -2.2 l-4.3 2.2 l1 -4.7 l-3.3 -3.2 l4.6 -1 z" fill="#ffd23f"/>',
+    // 분홍: 반짝이는 큰 눈 + 짙은 볼터치 + 작은 미소 (간절 귀여움, 최고 큐트)
+    pink:'<path d="M22 66 C18 42 36 24 58 24 C82 24 98 46 94 68 C91 88 76 97 58 97 C40 97 26 88 22 66 Z" fill="'+color+'" stroke="'+S+'" stroke-width="2.5"/>'+
+      '<ellipse cx="36" cy="71" rx="8" ry="5.5" fill="#ff5c92" opacity=".5"/><ellipse cx="81" cy="71" rx="8" ry="5.5" fill="#ff5c92" opacity=".5"/>'+
+      '<circle class="eye" cx="42" cy="56" r="9" fill="#3a2233"/><circle cx="45" cy="52" r="3.1" fill="#fff"/><circle cx="39" cy="59" r="1.6" fill="#fff"/>'+
+      '<circle class="eye eye2" cx="73" cy="56" r="9" fill="#3a2233"/><circle cx="76" cy="52" r="3.1" fill="#fff"/><circle cx="70" cy="59" r="1.6" fill="#fff"/>'+
+      '<path d="M52 76 q6 4.5 12 0" fill="none" stroke="#3a2233" stroke-width="2.6" stroke-linecap="round"/>',
+    // 보라: 흐뭇하게 감은 눈 + 여유 미소 + 반짝 (초연 쿨 귀여움)
+    purple:'<path d="M18 62 C16 40 34 24 58 24 C84 24 100 42 98 62 C96 84 80 97 58 97 C36 97 20 84 18 62 Z" fill="'+color+'" stroke="'+S+'" stroke-width="2.5"/>'+
+      '<ellipse cx="39" cy="67" rx="7" ry="4.5" fill="#c98bff" opacity=".35"/><ellipse cx="79" cy="67" rx="7" ry="4.5" fill="#c98bff" opacity=".35"/>'+
+      '<path d="M37 58 q7 -7 13 0" fill="none" stroke="#2a1b3a" stroke-width="3" stroke-linecap="round"/>'+
+      '<path d="M66 58 q7 -7 13 0" fill="none" stroke="#2a1b3a" stroke-width="3" stroke-linecap="round"/>'+
+      '<path d="M47 71 q11 8 22 0" fill="none" stroke="#2a1b3a" stroke-width="2.8" stroke-linecap="round"/>'+
+      '<path d="M89 42 l1.7 3.6 l3.8 0.8 l-2.7 2.7 l0.8 3.8 l-3.6 -1.9 l-3.6 1.9 l0.8 -3.8 l-2.7 -2.7 l3.8 -0.8 z" fill="#fff" opacity=".85"/>'
+  };
+  return '<svg class="jelly" viewBox="0 0 116 116" role="img" aria-label="도파민 젤리"><g class="body">'+(P[key]||P.yellow)+'</g></svg>';
+}
+var TYPES={
+  yellow:{c:'var(--j-yellow)',v:'cheek',emo:'🟡',name:"내일부터 젤리",tit:'“하고 싶은 건 많은데, 시작은 늘 내일부터”',
+    body:`<p>자기 전에 “내일은 진짜” 하고 폰 놓잖아. 근데 정신 차리면 두세 시간이 통째로 가 있고, 심한 날은 반나절이 없어. 끄고 나면 공허함이랑 현타. 할 일은 그대로고.</p>
+    <div class="bubble"><b>“생산적인 일을 해야 하는데, 안 하고 무의미하게 보내고 있어요”</b><span class="src">— 커뮤니티에서 본 글. 이런 글, 진짜 흔해. 너만 그런 거 아니야.</span></div>
+    <p>근데 그 시간이 ‘아까운’ 건, 아직 하고 싶은 게 살아있어서야. 진짜 끝난 사람은 아깝지도 않거든. 너, 아직 안 끝났어.</p>
+    <div class="method"><b>이렇게 시작해</b> → 그 시간에 하고 싶던 거 딱 하나<span id="pWant"></span>, 잠금화면에 적어둬. 1기에선 버디가 매일 그것만 물어봐 줘. ‘내일부터’가 처음으로 ‘오늘부터’가 되는 구조야.</div>
+    <p class="mute">네 숫자가 이보다 적어도 상관없어. 문제는 몇 시간이냐가 아니라 ‘내 맘대로 못 멈춘다’는 그 느낌이니까.</p>`},
+  green:{c:'var(--j-green)',v:'',emo:'🟢',name:"막아도 새는 젤리",tit:'“쇼츠를 막으면, 릴스로 샌다”',
+    body:`<p>앱 하나 지워봤자지. 쇼츠 막으면 릴스, 릴스 지우면 유튜브. 분명 뭔가 막았는데, 스크린타임은 그대로.</p>
+    <div class="bubble"><b>“도파민은 끊는 게 아니라 다른 데로 옮겨가는 거더라고요ㅋㅋ”</b><span class="src">— 커뮤니티에서 제일 많이 보이는 말이야.</span></div>
+    <p>의지가 약한 게 아니야. 출구 하나 막으면 다른 출구 찾는 건 지극히 정상인 뇌야. 그러니 전부 막으려 하지 마 — 오래 간 사람들 공통점은 반대였어: “제일 심한 것 하나부터, 차근차근.”</p>
+    <div class="method"><b>이렇게 시작해</b> → 첫 주엔 제일 심한 앱 하나만. 그게 어디로 새는지 1기 버디랑 같이 보다 보면 물길이 보여.</div>`},
+  blue:{c:'var(--j-blue)',v:'spiral',emo:'🔵',name:"지웠다 깔았다 젤리",tit:'“이번엔 진짜, N번째”',
+    body:`<p>인스타 지운 거 몇 번째야? 지우고 “이번엔 진짜” 하고, 며칠 뒤 슬그머니 다시 깔고.</p>
+    <div class="bubble"><b>“맨날 실패하면서 잊을 만하면 또 도전하는 게 스스로도 웃김”</b><span class="src">— 이 마음, 나만 본 게 아니더라.</span></div>
+    <p>다시 까는 사람은 한심한 게 아니라 아직 포기 안 한 사람이야. 너는 N번 실패한 게 아니라 N번 다시 시작한 거야.</p>
+    <div class="method"><b>이렇게 시작해</b> → 첫 주 목표는 비웃음 당할 만큼 작게 + <b>리셋 없는 카운트</b>(하루 빠져도 0으로 안 돌아가). 1기 버디가 그 카운트를 같이 세줘.</div>`},
+  pink:{c:'var(--j-pink)',v:'',emo:'🩷',name:"혼자삼일 젤리",tit:'“결심은 진심인데, 혼자면 딱 3일”',
+    body:`<p>결심한 날은 지켜. 이틀째도 그럭저럭. 근데 3일째, 아무도 안 보니까 “오늘 하루쯤”이 시작되지. 작심삼일? 아니 — 혼자삼일이야.</p>
+    <div class="bubble"><b>“털어놓으면 뭐 함. 어차피 ‘너 말고도 다 힘들어’ 소리 듣는데. 걍 혼자 있는 게 낫지”</b><span class="src">— 이렇게 쓴 사람도 있더라. 맞아, 어설픈 조언 들을 바엔 혼자가 낫지.</span></div>
+    <p>근데 의지가 약한 게 아니야. 아무도 안 보는 결심은 원래 유통기한이 짧아. 필요한 건 독한 각오가 아니라 봐주는 눈 하나야.</p>
+    <div class="method"><b>너한텐 1기가 그냥 처방 그 자체야</b> → 첫날부터 ‘봐주는 눈’이 3~4개 생겨. 4일째 아침이 달라져.</div>`},
+  purple:{c:'var(--j-purple)',v:'',emo:'🟣',name:"알아서 끄는 젤리",tit:'이 테스트가 필요 없는 소수',
+    body:`<p>너는 보는 시간을 스스로 다루는 편이야. 볼 거 보고, 끌 때 끄고. 이 테스트가 굳이 필요 없는 소수야.</p>
+    <p>대신 주변에 “내일부터 진짜” 하는 친구 하나쯤 있지? <b>이 테스트 걔한테 넘겨줘.</b> 걔한텐 필요할지도 몰라.</p>`,nocta:true}
+};
+
+/* ---------- 퀴즈 문항 ---------- */
+var Q=[
+ {t:"하루에 숏폼·영상, 얼마나 봐?",h:"스크린타임 보면 정확한데, 감으로 골라도 돼",o:[
+   ["30분 미만",{peace:2}],["1시간쯤",{}],["2~3시간",{sev:1}],["4~5시간",{sev:2}],["그 이상… (스크린타임 보기 무서워)",{sev:3}]]},
+ {t:"그 시간, 네 맘대로 조절이 돼?",o:[
+   ["잘 돼, 딱 적당해",{peace:3}],["좀 어려워",{}],["어려워, 줄이고 싶어",{sev:1}],["아예 안 돼",{sev:2}]]},
+ {t:"오래 보고 나면 제일 먼저 드는 기분은?",o:[
+   ["별 느낌 없어",{peace:2}],["아깝고, 공허하고, 현타 와",{B:1}],["축 처지고 아무것도 하기 싫어",{B:1}],["내가 좀 한심하다 싶어",{B:1}]]},
+ {t:"숏폼 때문에 하려던 일 미루거나 못 한 적?",o:[
+   ["거의 없어",{peace:1}],["가끔",{}],["꽤 자주",{B:2}],["맨날 그래",{B:3}]]},
+ {t:"줄이려고 실제로 해본 것, 몇 개나 돼?",h:"앱삭제·시간제한·폴더폰·챌린지·의지 등",o:[
+   ["해본 적 없어",{}],["한두 개",{C:1}],["서너 개",{C:2}],["다 해봤지 (셀 수 없음)",{C:3}]]},
+ {t:"그 시도들, 지금은?",o:[
+   ["잘 유지 중",{peace:1}],["처음엔 됐는데 예전으로 돌아옴",{C:2}],["별 효과 없었어",{C:1}],["시도 안 함",{}]]},
+ {t:"한 앱 막으면 30분 뒤 너는?",o:[
+   ["그냥 안 봐",{peace:1}],["다른 걸로 옮겨감 (OTT·유튜브)",{A:3}],["기어이 다시 뚫음",{A:2}],["진짜 딴 거 함",{peace:1}]]},
+ {t:"화면에 뺏긴 그 시간에, 원래 뭘 하고 싶었어?",save:"want",o:[
+   ["운동·건강",{B:1}],["공부·자기계발",{B:1}],["일·수입",{B:1}],["창작·취미",{B:1}],["가족·사람",{B:1}],["딱히 없어",{peace:1}]]},
+ {t:"혼자 결심하면 며칠 가?",o:[
+   ["잘 지켜",{peace:1}],["3일쯤",{D:2}],["하루",{D:3}],["결심도 잘 안 돼",{D:1}]]},
+ {t:"마지막! 나이대 / 하는 일은?",h:"익명 통계용이야",o:[
+   ["20대",{}],["30대",{}],["40대+",{}],["프리랜서·1인노동",{}],["직장인·기타",{}]]}
+];
+var WANTS=["운동","공부","그 일","창작","가족과의 시간","그거"];
+
+/* ---------- 상태 & 로직 ---------- */
+var idx=0, ans=[], sc={A:0,B:0,C:0,D:0,peace:0,sev:0}, wantIdx=null, curType='';
+var $=function(s){return document.querySelector(s)};
+document.getElementById('heroBlobs').innerHTML=['yellow','green','blue','pink','purple'].map(function(k){return jelly(TYPES[k].c,k)}).join('');
+
+function startQuiz(){ $('#quizSec').classList.remove('hidden'); $('#quizSec').scrollIntoView(); render(); }
+$('#startQuiz').onclick=startQuiz;
+$('#skipToOffer').onclick=function(){ $('#offerSec').scrollIntoView(); };
+
+function render(){
+  var q=Q[idx];
+  $('#pbar').style.width=((idx)/Q.length*100)+'%';
+  $('#qcount').textContent=(idx+1)+' / '+Q.length;
+  $('#qback').classList.toggle('hidden',idx===0);
+  var box='<div class="qstep"><div class="qtitle">'+q.t+'</div>'+(q.h?'<div class="qhint">'+q.h+'</div>':'<div style="height:8px"></div>')+'<div class="opts">';
+  q.o.forEach(function(o,i){
+    var sel=ans[idx]===i?' sel':'';
+    box+='<button class="opt'+sel+'" data-i="'+i+'"><span class="box">'+(sel?'✓':'')+'</span>'+o[0]+'</button>';
+  });
+  box+='</div></div>';
+  $('#qhost').innerHTML=box;
+  $('#qhost').querySelectorAll('.opt').forEach(function(b){
+    b.onclick=function(){ pick(parseInt(b.dataset.i)); };
+  });
+}
+function pick(i){
+  ans[idx]=i;
+  var q=Q[idx];
+  if(q.save==='want') wantIdx=i;
+  setTimeout(function(){
+    if(idx<Q.length-1){ idx++; render(); }
+    else finish();
+  },180);
+}
+$('#qback').onclick=function(){ if(idx>0){idx--;render();} };
+
+function finish(){
+  // 점수 집계
+  sc={A:0,B:0,C:0,D:0,peace:0,sev:0};
+  Q.forEach(function(q,qi){
+    var w=q.o[ans[qi]] && q.o[ans[qi]][1] || {};
+    for(var k in w) sc[k]=(sc[k]||0)+w[k];
+  });
+  $('#pbar').style.width='100%';
+  var type=decide();
+  showResult(type);
+}
+function decide(){
+  // 공존러: 저사용/조절됨 + 갈등 없음
+  if(sc.peace>=4 && sc.B===0 && sc.A===0 && sc.D<2) return 'purple';
+  var axes={A:sc.A,B:sc.B,C:sc.C,D:sc.D};
+  var order=['B','D','C','A']; // 동점 우선순위
+  var best=order[0], bestv=-1;
+  order.forEach(function(k){ if(axes[k]>bestv){bestv=axes[k];best=k;} });
+  if(bestv<=0) return 'purple';
+  return {B:'yellow',A:'green',C:'blue',D:'pink'}[best];
+}
+function showResult(type){
+  var t=TYPES[type]; curType=t.name;
+  $('#quizSec').classList.add('hidden');
+  $('#resultSec').classList.remove('hidden');
+  $('#rJelly').innerHTML=jelly(t.c,type);
+  $('#rTag').textContent=t.emo+' 당신은 — '+t.name;
+  $('#rTag').style.background=t.c;
+  $('#rTitle').textContent=t.tit;
+  $('#rBody').innerHTML=t.body;
+  // D6 개인화
+  var pw=document.getElementById('pWant');
+  if(pw && wantIdx!=null && wantIdx<WANTS.length){ var w=WANTS[wantIdx],cc=w.charCodeAt(w.length-1),jo=(cc>=0xAC00&&cc<=0xD7A3&&(cc-0xAC00)%28!==0)?'이라고':'라고'; pw.textContent=' — 아까 ‘'+w+'’'+jo+' 했지'; }
+  // 공존러는 CTA/오퍼 숨김
+  if(t.nocta){ $('#toOfferBtn').textContent='나 ‘알아서 끄는 젤리’ — 친구한테 넘기기'; $('#toOfferBtn').onclick=function(){ if(navigator.share){navigator.share({title:'도파민 젤리 테스트',url:location.href});}else{alert('링크를 복사해서 친구한테 보내주세요 🙂');} }; }
+  else { $('#toOfferBtn').textContent='이 유형, 1기에선 이렇게 굴러가 — 자리 보기 ↓'; $('#toOfferBtn').onclick=function(){ $('#offerSec').scrollIntoView(); }; }
+  $('#resultSec').scrollIntoView();
+}
+
+/* ---------- 신청 모달 ---------- */
+var modal=$('#payModal');
+function openModal(){ modal.classList.add('on'); $('#payStep1').classList.remove('hidden'); $('#payStep2').classList.add('hidden'); setTimeout(function(){$('#fName').focus();},50);}
+function closeModal(){ modal.classList.remove('on'); }
+$('#applyBtn').onclick=openModal;
+modal.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closeModal;});
+modal.addEventListener('click',function(e){ if(e.target===modal) closeModal(); });
+$('#applyForm').onsubmit=function(e){
+  e.preventDefault();
+  var name=$('#fName').value.trim()||'신청';
+  // hidden 필드 채우기 → Netlify 대시보드에 함께 수집
+  $('#fType').value=curType;
+  $('#fWant').value=(wantIdx!=null && wantIdx<WANTS.length)?WANTS[wantIdx]:'';
+  $('#fSrc').value=new URLSearchParams(location.search).get('src')||'direct';
+  // Netlify Forms로 전송 (AJAX — 페이지 이동 없이 입금안내 표시). 실패해도 사용자 흐름 진행.
+  var body=new URLSearchParams(new FormData(e.target)).toString();
+  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body}).catch(function(){});
+  // 로컬 백업 로그
+  try{ var log=JSON.parse(localStorage.getItem('remakers_apply')||'[]'); log.push({name:name,contact:$('#fContact').value,type:curType,want:$('#fWant').value,src:$('#fSrc').value,t:Date.now()}); localStorage.setItem('remakers_apply',JSON.stringify(log)); }catch(_){}
+  $('#doneName').textContent=name;
+  $('#payStep1').classList.add('hidden');
+  $('#payStep2').classList.remove('hidden');
+};
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+</script>
+</body>
+</html>
