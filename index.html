@@ -315,20 +315,19 @@ p{color:var(--ink-soft);font-size:16px}
       <form id="applyForm" name="apply" method="POST" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="apply">
         <p hidden aria-hidden="true"><label>비워두세요 <input name="bot-field"></label></p>
-        <div class="open" style="margin:0 0 14px"><label for="fName">이름</label><input id="fName" name="이름" required placeholder="성함" autocomplete="name"></div>
-        <div class="open" style="margin:0 0 14px"><label for="fContact">연락처(오픈챗 ID·전화·이메일)</label><input id="fContact" name="연락처" required placeholder="연락 가능한 곳" autocomplete="off"></div>
+        <div class="open" style="margin:0 0 14px"><label for="fContact">연락처</label><input id="fContact" name="연락처" required placeholder="오픈챗 ID·전화·이메일 중 편한 곳" autocomplete="off"></div>
         <input type="hidden" name="유형" id="fType">
         <input type="hidden" name="하고싶은거" id="fWant">
         <input type="hidden" name="유입채널" id="fSrc">
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);margin-bottom:16px">
           <input type="checkbox" id="fAgree" name="동의" required style="margin-top:4px"> 개인정보 수집·이용에 동의합니다 (신청·연락 목적)</label>
-        <p class="mute" style="font-size:12px;margin:-8px 0 16px">수집 항목: 이름·연락처 · 목적: 1기 신청·연락 · 보유: 1기 종료 후 파기 · 동의 거부 시 신청이 어려워요.</p>
+        <p class="mute" style="font-size:12px;margin:-8px 0 16px">수집 항목: 연락처 · 목적: 1기 신청·연락 · 보유: 1기 종료 후 파기 · 동의 거부 시 신청이 어려워요.</p>
         <button type="submit" class="btn btn-accent">입금 안내 받기 →</button>
         <button type="button" class="btn btn-ghost" data-close style="margin-top:8px">닫기</button>
       </form>
     </div>
     <div id="payStep2" class="hidden">
-      <h3>🫧 <span id="doneName">신청</span>님, 접수됐어요!</h3>
+      <h3>🫧 신청 접수됐어요!</h3>
       <p style="margin:12px 0">자리 확정은 <b>보증금 입금</b>으로 완료돼요 👇</p>
       <div class="acct">계좌 <b>우리은행 1002-458-953384</b> (예금주 채상희)<br>금액 <b>30,000원</b> · 입금자명 <b>본인 이름</b></div>
       <p style="font-size:14px">입금 확인되면 바로 확정 메시지 드릴게요. (선착 15석, 입금 순 마감)<br><b>8월 3일(월) 시작 · 4주 중 20일 인증하면 전액 환급.</b> 이번엔 혼자 아니에요. — 채선생</p>
@@ -513,14 +512,13 @@ function showResult(type){
 
 /* ---------- 신청 모달 ---------- */
 var modal=$('#payModal');
-function openModal(){ track('apply_open'); modal.classList.add('on'); $('#payStep1').classList.remove('hidden'); $('#payStep2').classList.add('hidden'); setTimeout(function(){$('#fName').focus();},50);}
+function openModal(){ track('apply_open'); modal.classList.add('on'); $('#payStep1').classList.remove('hidden'); $('#payStep2').classList.add('hidden'); setTimeout(function(){$('#fContact').focus();},50);}
 function closeModal(){ modal.classList.remove('on'); }
 $('#applyBtn').onclick=openModal;
 modal.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closeModal;});
 modal.addEventListener('click',function(e){ if(e.target===modal) closeModal(); });
 $('#applyForm').onsubmit=function(e){
   e.preventDefault();
-  var name=$('#fName').value.trim()||'신청';
   // hidden 필드 채우기 → Netlify 대시보드에 함께 수집
   $('#fType').value=curType;
   $('#fWant').value=(wantIdx!=null && wantIdx<WANTS.length)?WANTS[wantIdx]:'';
@@ -530,8 +528,7 @@ $('#applyForm').onsubmit=function(e){
   var body=new URLSearchParams(new FormData(e.target)).toString();
   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body}).catch(function(){});
   // 로컬 백업 로그
-  try{ var log=JSON.parse(localStorage.getItem('remakers_apply')||'[]'); log.push({name:name,contact:$('#fContact').value,type:curType,want:$('#fWant').value,src:$('#fSrc').value,t:Date.now()}); localStorage.setItem('remakers_apply',JSON.stringify(log)); }catch(_){}
-  $('#doneName').textContent=name;
+  try{ var log=JSON.parse(localStorage.getItem('remakers_apply')||'[]'); log.push({contact:$('#fContact').value,type:curType,want:$('#fWant').value,src:$('#fSrc').value,t:Date.now()}); localStorage.setItem('remakers_apply',JSON.stringify(log)); }catch(_){}
   $('#payStep1').classList.add('hidden');
   $('#payStep2').classList.remove('hidden');
 };
