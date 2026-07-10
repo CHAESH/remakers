@@ -5,6 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>리메이커스 1기 — 혼자 하면 3일, 같이 하면 4주</title>
 <meta name="description" content="숏폼에 뺏긴 하루 한두 시간. 혼자 말고, 매일 서로 봐주는 3~4명과 함께하는 4주. 90초 유형테스트로 내 '도파민 젤리'부터.">
+
+<!-- 소셜 공유 카드 (스레드·인스타·카톡 링크 미리보기) -->
+<link rel="canonical" href="https://remakers.kr/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://remakers.kr/">
+<meta property="og:site_name" content="리메이커스">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="혼자 하면 3일, 같이 하면 4주 — 리메이커스 1기">
+<meta property="og:description" content="숏폼에 뺏긴 하루 한두 시간. 90초 유형테스트로 내 '도파민 젤리'부터. 매일 서로 봐주는 3~4명과 4주.">
+<meta property="og:image" content="https://remakers.kr/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="혼자 하면 3일, 같이 하면 4주 — 리메이커스 1기">
+<meta name="twitter:description" content="90초 유형테스트로 내 '도파민 젤리'부터. 매일 서로 봐주는 3~4명과 4주.">
+<meta name="twitter:image" content="https://remakers.kr/og.png">
+
+<!-- ── 방문·퍼널·유입채널 추적 (PostHog · EU 프랑크푸르트 · 쿠키리스=동의배너 불필요) ── -->
+<script>
+  /* ↓ PostHog 프로젝트 키만 붙여넣으면 추적 활성화. 비워두면 추적만 꺼지고 페이지·신청은 정상 동작. */
+  window.REMAKERS_POSTHOG_KEY = "phc_yWPUSWmeNbQj4zVoecpwvdHVGsvqKjRyXKQE77tHNfsm";
+</script>
+<script>
+  (function () {
+    var KEY = window.REMAKERS_POSTHOG_KEY;
+    if (!KEY || KEY.slice(0, 2) === "__") return; /* 키 미설정 → 추적 비활성(페이지는 정상) */
+    !(function (t, e) {
+      var o, n, p, r;
+      e.__SV ||
+        ((window.posthog = e),
+        (e._i = []),
+        (e.init = function (i, s, a) {
+          function g(t, e) {
+            var o = e.split(".");
+            (2 == o.length && ((t = t[o[0]]), (e = o[1])),
+              (t[e] = function () {
+                t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+              }));
+          }
+          (((p = t.createElement("script")).type = "text/javascript"),
+            (p.crossOrigin = "anonymous"),
+            (p.async = !0),
+            (p.src =
+              s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js"),
+            (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r));
+          var u = e;
+          for (
+            void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+              u.people = u.people || [],
+              u.toString = function (t) {
+                var e = "posthog";
+                return ("posthog" !== a && (e += "." + a), t || (e += " (stub)"), e);
+              },
+              u.people.toString = function () {
+                return u.toString(1) + ".people (stub)";
+              },
+              o =
+                "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(
+                  " ",
+                ),
+              n = 0;
+            n < o.length;
+            n++
+          )
+            g(u, o[n]);
+          e._i.push([i, s, a]);
+        }),
+        (e.__SV = 1));
+    })(document, window.posthog || []);
+    posthog.init(KEY, {
+      api_host: "https://eu.i.posthog.com",
+      persistence: "memory",
+      autocapture: false,
+      capture_pageview: false,
+      disable_session_recording: true,
+      person_profiles: "identified_only",
+      loaded: function (ph) {
+        var src = new URLSearchParams(location.search).get("src") || "direct";
+        ph.register({ src: src }); /* 유입채널을 모든 이벤트에 부착 */
+        ph.capture("$pageview"); /* 방문 = 전환율 분모 */
+      },
+    });
+  })();
+</script>
 <style>
 :root{
   --amber:#D97706; --amber-ink:#9A5608; --green:#059669; --green-ink:#047857;
@@ -239,6 +321,7 @@ p{color:var(--ink-soft);font-size:16px}
         <input type="hidden" name="유입채널" id="fSrc">
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);margin-bottom:16px">
           <input type="checkbox" id="fAgree" name="동의" required style="margin-top:4px"> 개인정보 수집·이용에 동의합니다 (신청·연락 목적)</label>
+        <p class="mute" style="font-size:12px;margin:-8px 0 16px">수집 항목: 이름·연락처 · 목적: 1기 신청·연락 · 보유: 1기 종료 후 파기 · 동의 거부 시 신청이 어려워요.</p>
         <button type="submit" class="btn btn-accent">입금 안내 받기 →</button>
         <button type="button" class="btn btn-ghost" data-close style="margin-top:8px">닫기</button>
       </form>
@@ -246,7 +329,7 @@ p{color:var(--ink-soft);font-size:16px}
     <div id="payStep2" class="hidden">
       <h3>🫧 <span id="doneName">신청</span>님, 접수됐어요!</h3>
       <p style="margin:12px 0">자리 확정은 <b>보증금 입금</b>으로 완료돼요 👇</p>
-      <div class="acct">계좌 <b>[은행] 000-0000-0000</b> (예금주 채상희)<br>금액 <b>30,000원</b> · 입금자명 <b>본인 이름</b></div>
+      <div class="acct">계좌 <b>우리은행 1002-458-953384</b> (예금주 채상희)<br>금액 <b>30,000원</b> · 입금자명 <b>본인 이름</b></div>
       <p style="font-size:14px">입금 확인되면 바로 확정 메시지 드릴게요. (선착 15석, 입금 순 마감)<br><b>8월 3일(월) 시작 · 4주 중 20일 인증하면 전액 환급.</b> 이번엔 혼자 아니에요. — 채선생</p>
       <button type="button" class="btn btn-primary" data-close style="margin-top:16px">확인</button>
     </div>
@@ -349,11 +432,15 @@ var WANTS=["운동","공부","그 일","창작","가족과의 시간","그거"];
 /* ---------- 상태 & 로직 ---------- */
 var idx=0, ans=[], sc={A:0,B:0,C:0,D:0,peace:0,sev:0}, wantIdx=null, curType='';
 var $=function(s){return document.querySelector(s)};
+/* 퍼널 이벤트 — PostHog 미설정 시 자동 무시(no-op) */
+function track(ev,props){ try{ if(window.posthog&&posthog.capture) posthog.capture(ev,props||{}); }catch(_){}}
 document.getElementById('heroBlobs').innerHTML=['yellow','green','blue','pink','purple'].map(function(k){return jelly(TYPES[k].c,k)}).join('');
+/* 오퍼 블록이 화면에 실제로 보이면 1회 기록(퀴즈경로·스킵경로 모두 포착) */
+try{ var _ofSeen=false; new IntersectionObserver(function(es){ es.forEach(function(x){ if(x.isIntersecting&&!_ofSeen){ _ofSeen=true; track('offer_view'); } }); },{threshold:0,rootMargin:'0px 0px -50% 0px'}).observe($('#offerSec')); }catch(_){}
 
-function startQuiz(){ $('#quizSec').classList.remove('hidden'); $('#quizSec').scrollIntoView(); render(); }
+function startQuiz(){ track('quiz_start'); $('#quizSec').classList.remove('hidden'); $('#quizSec').scrollIntoView(); render(); }
 $('#startQuiz').onclick=startQuiz;
-$('#skipToOffer').onclick=function(){ $('#offerSec').scrollIntoView(); };
+$('#skipToOffer').onclick=function(){ track('hero_skip_offer'); $('#offerSec').scrollIntoView(); };
 
 function render(){
   var q=Q[idx];
@@ -391,6 +478,7 @@ function finish(){
   });
   $('#pbar').style.width='100%';
   var type=decide();
+  track('quiz_complete',{jelly_type:type});
   showResult(type);
 }
 function decide(){
@@ -405,6 +493,7 @@ function decide(){
 }
 function showResult(type){
   var t=TYPES[type]; curType=t.name;
+  track('result_view',{jelly_type:type,is_customer:!t.nocta});
   $('#quizSec').classList.add('hidden');
   $('#resultSec').classList.remove('hidden');
   $('#rJelly').innerHTML=jelly(t.c,type);
@@ -423,7 +512,7 @@ function showResult(type){
 
 /* ---------- 신청 모달 ---------- */
 var modal=$('#payModal');
-function openModal(){ modal.classList.add('on'); $('#payStep1').classList.remove('hidden'); $('#payStep2').classList.add('hidden'); setTimeout(function(){$('#fName').focus();},50);}
+function openModal(){ track('apply_open'); modal.classList.add('on'); $('#payStep1').classList.remove('hidden'); $('#payStep2').classList.add('hidden'); setTimeout(function(){$('#fName').focus();},50);}
 function closeModal(){ modal.classList.remove('on'); }
 $('#applyBtn').onclick=openModal;
 modal.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closeModal;});
@@ -435,6 +524,7 @@ $('#applyForm').onsubmit=function(e){
   $('#fType').value=curType;
   $('#fWant').value=(wantIdx!=null && wantIdx<WANTS.length)?WANTS[wantIdx]:'';
   $('#fSrc').value=new URLSearchParams(location.search).get('src')||'direct';
+  track('apply_submit',{jelly_type:curType,want:$('#fWant').value,src:$('#fSrc').value});
   // Netlify Forms로 전송 (AJAX — 페이지 이동 없이 입금안내 표시). 실패해도 사용자 흐름 진행.
   var body=new URLSearchParams(new FormData(e.target)).toString();
   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body}).catch(function(){});
