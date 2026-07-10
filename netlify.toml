@@ -1,3 +1,13 @@
 # 정적 랜딩 — 빌드 없음, 리포 루트를 그대로 배포
 [build]
   publish = "."
+
+# 신청 알림 함수 (폼 제출 시 하루봇 #하루로 발송)
+[functions]
+  directory = "netlify/functions"
+
+# 함수 소스가 정적파일로 공개 노출되지 않게 차단
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404.html"
+  status = 404
