@@ -262,6 +262,22 @@ p{color:var(--ink-soft);font-size:16px}
       <input id="wantOne" type="text" placeholder="아무렇게나 한 줄" autocomplete="off">
     </div>
     <button class="btn btn-primary" id="toOfferBtn">이 유형, 1기에선 이렇게 굴러가 — 자리 보기 ↓</button>
+
+    <div class="card" id="ivCard" style="margin-top:var(--sp3);text-align:left">
+      <p style="font-weight:800;font-size:15.5px">🎙️ 딱 당신 이야기가 더 듣고 싶어요 — 30분 인터뷰</p>
+      <p class="mute" style="margin:8px 0 12px">이 유형이 실제로 어디서 무너지는지, 당신 얘기가 프로그램을 만들어요. 화상/전화 30분, <b>감사 사례</b> 드려요. 1기 신청과 별개 — 인터뷰만 해도 돼요.</p>
+      <form id="ivForm" name="interview" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="interview">
+        <p hidden aria-hidden="true"><label>비워두세요 <input name="bot-field"></label></p>
+        <input type="hidden" name="유형" id="ivType">
+        <input type="hidden" name="답변" id="ivAnswers">
+        <input type="hidden" name="유입채널" id="ivSrc">
+        <div class="open" style="margin:0 0 10px"><input id="ivContact" name="연락처" required placeholder="오픈챗 ID·전화·이메일 중 편한 곳" autocomplete="off"></div>
+        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-soft);margin-bottom:12px"><input type="checkbox" name="동의" required style="margin-top:3px"> 인터뷰 연락 목적의 개인정보(연락처·테스트 응답) 수집·이용에 동의합니다 (종료 후 파기)</label>
+        <button type="submit" class="btn btn-ghost" style="width:100%">🎙️ 인터뷰 신청하기</button>
+      </form>
+      <p id="ivDone" class="refund" style="display:none">✓ 접수됐어요! 곧 연락드릴게요 — 고마워요.</p>
+    </div>
   </div>
 </section>
 
@@ -337,9 +353,10 @@ p{color:var(--ink-soft);font-size:16px}
         <input type="hidden" name="유입채널" id="fSrc">
         <input type="hidden" name="나이대" id="fAge">
         <input type="hidden" name="하는일" id="fJob">
+        <input type="hidden" name="답변" id="fAnswers">
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);margin-bottom:16px">
           <input type="checkbox" id="fAgree" name="동의" required style="margin-top:4px"> 개인정보 수집·이용에 동의합니다 (신청·연락 목적)</label>
-        <p class="mute" style="font-size:12px;margin:-8px 0 16px">수집 항목: 연락처·나이대·직업(통계) · 목적: 1기 신청·연락 · 보유: 1기 종료 후 파기 · 동의 거부 시 신청이 어려워요.</p>
+        <p class="mute" style="font-size:12px;margin:-8px 0 16px">수집 항목: 연락처·나이대·직업·테스트 응답(통계) · 목적: 1기 신청·연락 · 보유: 1기 종료 후 파기 · 동의 거부 시 신청이 어려워요.</p>
         <button type="submit" class="btn btn-accent">입금 안내 받기 →</button>
         <button type="button" class="btn btn-ghost" data-close style="margin-top:8px">닫기</button>
       </form>
@@ -424,38 +441,45 @@ var TYPES={
 
 /* ---------- 퀴즈 문항 ---------- */
 var Q=[
- {t:"하루에 숏폼·영상, 얼마나 봐?",h:"스크린타임 보면 정확한데, 감으로 골라도 돼",o:[
+ {t:"하루에 숏폼·영상, 얼마나 봐?",k:"사용량",h:"스크린타임 보면 정확한데, 감으로 골라도 돼",o:[
    ["30분 미만",{peace:2}],["1시간쯤",{}],["2~3시간",{sev:1}],["4~5시간",{sev:2}],["그 이상… (스크린타임 보기 무서워)",{sev:3}]]},
- {t:"그 시간, 네 맘대로 조절이 돼?",o:[
+ {t:"그 시간, 네 맘대로 조절이 돼?",k:"조절",o:[
    ["잘 돼, 딱 적당해",{peace:3}],["좀 어려워",{}],["어려워, 줄이고 싶어",{sev:1}],["아예 안 돼",{sev:2}]]},
- {t:"오래 보고 나면 제일 먼저 드는 기분은?",o:[
+ {t:"오래 보고 나면 제일 먼저 드는 기분은?",k:"기분",o:[
    ["별 느낌 없어",{peace:2}],["아깝고, 공허하고, 현타 와",{}],["축 처지고 아무것도 하기 싫어",{}],["내가 좀 한심하다 싶어",{}]]},
- {t:"숏폼 때문에 하려던 일 미루거나 못 한 적?",o:[
+ {t:"숏폼 때문에 하려던 일 미루거나 못 한 적?",k:"미룸",o:[
    ["거의 없어",{peace:1}],["가끔",{}],["꽤 자주",{B:2}],["맨날 그래",{B:3}]]},
- {t:"줄이려고 실제로 해본 것, 몇 개나 돼?",h:"앱삭제·시간제한·폴더폰·챌린지·의지 등",o:[
+ {t:"줄이려고 실제로 해본 것, 몇 개나 돼?",k:"시도이력",h:"앱삭제·시간제한·폴더폰·챌린지·의지 등",o:[
    ["해본 적 없어",{}],["한두 개",{C:1}],["서너 개",{C:2}],["다 해봤지 (셀 수 없음)",{C:3}]]},
- {t:"그 시도들, 지금은?",o:[
+ {t:"그 시도들, 지금은?",k:"시도결과",o:[
    ["잘 유지 중",{peace:1}],["처음엔 됐는데 예전으로 돌아옴",{C:2}],["별 효과 없었어",{C:1}],["시도 안 함",{}]]},
- {t:"한 앱 막으면 30분 뒤 너는?",o:[
+ {t:"한 앱 막으면 30분 뒤 너는?",k:"차단반응",o:[
    ["그냥 안 봐",{peace:1}],["다른 걸로 옮겨감 (OTT·유튜브)",{A:3}],["기어이 다시 뚫음",{A:2}],["진짜 딴 거 함",{peace:1}]]},
- {t:"화면에 뺏긴 그 시간에, 원래 뭘 하고 싶었어?",save:"want",o:[
+ {t:"화면에 뺏긴 그 시간에, 원래 뭘 하고 싶었어?",k:"하고싶던것",save:"want",o:[
    ["운동·건강",{}],["공부·자기계발",{}],["일·수입",{}],["창작·취미",{}],["가족·사람",{}],["딱히 없어",{peace:1}]]},
- {t:"혼자 결심하면 며칠 가?",o:[
+ {t:"혼자 결심하면 며칠 가?",k:"혼자결심",o:[
    ["잘 지켜",{peace:1}],["3일쯤",{D:2}],["하루",{D:3}],["결심도 잘 안 돼",{D:1}]]},
- {t:"나이대는?",h:"익명 통계용이야",save:"age",o:[
+ {t:"나이대는?",k:"나이대",h:"익명 통계용이야",save:"age",o:[
    ["20대",{}],["30대",{}],["40대",{}],["50대 이상",{}]]},
- {t:"마지막! 하는 일은?",h:"익명 통계용이야",save:"job",o:[
-   ["프리랜서·1인사업",{}],["직장인",{}],["학생",{}],["주부·육아",{}],["기타",{}]]}
+ {t:"마지막! 하는 일은?",k:"직업",h:"익명 통계용이야 — 업에 따라 프로그램 설계가 달라져",save:"job",o:[
+   ["프리랜서·1인사업",{}],["사무직 직장인",{}],["전문·관리직 (의료·법률·금융·개발 등)",{}],["서비스·판매·현장직",{}],["학생",{}],["주부·육아",{}],["무직·기타",{}]]}
 ];
 var WANTS=["운동","공부","그 일","창작","가족과의 시간","그거"];
 var AGES=["20대","30대","40대","50대+"];
-var JOBS=["프리랜서·1인사업","직장인","학생","주부·육아","기타"];
+var JOBS=["프리랜서·1인사업","사무직 직장인","전문·관리직","서비스·판매·현장직","학생","주부·육아","무직·기타"];
 
 /* ---------- 상태 & 로직 ---------- */
 var idx=0, ans=[], sc={A:0,B:0,C:0,D:0,peace:0,sev:0}, wantIdx=null, ageIdx=null, jobIdx=null, curType='';
 var $=function(s){return document.querySelector(s)};
 /* 퍼널 이벤트 — PostHog 미설정 시 자동 무시(no-op) */
 function track(ev,props){ try{ if(window.posthog&&posthog.capture) posthog.capture(ev,props||{}); }catch(_){}}
+/* 퀴즈 전체 응답 → {문항키: 선택 라벨} (PostHog·폼 저장용 — 기능 설계 데이터) */
+function answerMap(){
+  var m={};
+  Q.forEach(function(q,qi){ if(ans[qi]!=null && q.o[ans[qi]]) m[q.k||('q'+(qi+1))]=q.o[ans[qi]][0]; });
+  try{ var w=document.getElementById('wantOne'); if(w && w.value.trim()) m['하고싶던것_직접입력']=w.value.trim(); }catch(_){}
+  return m;
+}
 document.getElementById('heroBlobs').innerHTML=['yellow','green','blue','pink','purple'].map(function(k){return jelly(TYPES[k].c,k)}).join('');
 /* 오퍼 블록이 화면에 실제로 보이면 1회 기록(퀴즈경로·스킵경로 모두 포착) */
 try{ var _ofSeen=false; new IntersectionObserver(function(es){ es.forEach(function(x){ if(x.isIntersecting&&!_ofSeen){ _ofSeen=true; track('offer_view'); } }); },{threshold:0,rootMargin:'0px 0px -50% 0px'}).observe($('#offerSec')); }catch(_){}
@@ -502,7 +526,7 @@ function finish(){
   });
   $('#pbar').style.width='100%';
   var type=decide();
-  track('quiz_complete',{jelly_type:type});
+  track('quiz_complete',Object.assign({jelly_type:type},answerMap()));
   showResult(type);
 }
 function decide(){
@@ -531,6 +555,8 @@ function showResult(type){
   // 미래자아 블록도 같은 want로 개인화 (오퍼는 항상 DOM에 있음; 스킵 경로면 기본문구 유지)
   var fwe=document.getElementById('fWantEcho');
   if(fwe && wantIdx!=null && wantIdx<WANTS.length){ fwe.textContent=WANTS[wantIdx]; }
+  // 공존러(비타겟)는 인터뷰 카드 숨김
+  var ivc=document.getElementById('ivCard'); if(ivc) ivc.style.display = t.nocta ? 'none' : '';
   // 공존러는 CTA/오퍼 숨김
   if(t.nocta){ $('#toOfferBtn').textContent='나 ‘알아서 끄는 젤리’ — 친구한테 넘기기'; $('#toOfferBtn').onclick=function(){ if(navigator.share){navigator.share({title:'도파민 젤리 테스트',url:location.href});}else{alert('링크를 복사해서 친구한테 보내주세요 🙂');} }; }
   else { $('#toOfferBtn').textContent='이 유형, 1기에선 이렇게 굴러가 — 자리 보기 ↓'; $('#toOfferBtn').onclick=function(){ $('#offerSec').scrollIntoView(); }; }
@@ -544,6 +570,23 @@ function closeModal(){ modal.classList.remove('on'); }
 $('#applyBtn').onclick=openModal;
 modal.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closeModal;});
 modal.addEventListener('click',function(e){ if(e.target===modal) closeModal(); });
+/* 인터뷰 옵트인 — 퀴즈만 한 사람도 연락처 수집 (신청과 별개 파이프) */
+$('#ivForm').onsubmit=function(e){
+  e.preventDefault();
+  $('#ivType').value=curType;
+  $('#ivAnswers').value=JSON.stringify(answerMap());
+  $('#ivSrc').value=new URLSearchParams(location.search).get('src')||'direct';
+  track('interview_optin',{jelly_type:curType});
+  var body=new URLSearchParams(new FormData(e.target)).toString();
+  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body}).catch(function(){});
+  e.target.style.display='none'; $('#ivDone').style.display='block';
+};
+/* 결과 페이지 자유입력 want → 미래자아 블록 실시간 반영 */
+(function(){ var wo=$('#wantOne'); if(!wo) return; wo.addEventListener('input',function(){
+  var fwe=document.getElementById('fWantEcho'); if(!fwe) return;
+  var v=wo.value.trim();
+  fwe.textContent = v || ((wantIdx!=null&&wantIdx<WANTS.length)?WANTS[wantIdx]:'하고 싶던 그거');
+});})();
 $('#applyForm').onsubmit=function(e){
   e.preventDefault();
   // hidden 필드 채우기 → Netlify 대시보드에 함께 수집
@@ -551,6 +594,7 @@ $('#applyForm').onsubmit=function(e){
   $('#fWant').value=(wantIdx!=null && wantIdx<WANTS.length)?WANTS[wantIdx]:'';
   $('#fAge').value=(ageIdx!=null && ageIdx<AGES.length)?AGES[ageIdx]:'';
   $('#fJob').value=(jobIdx!=null && jobIdx<JOBS.length)?JOBS[jobIdx]:'';
+  $('#fAnswers').value=JSON.stringify(answerMap());
   $('#fSrc').value=new URLSearchParams(location.search).get('src')||'direct';
   track('apply_submit',{jelly_type:curType,want:$('#fWant').value,age:$('#fAge').value,job:$('#fJob').value,src:$('#fSrc').value});
   // Netlify Forms로 전송 (AJAX — 페이지 이동 없이 입금안내 표시). 실패해도 사용자 흐름 진행.
